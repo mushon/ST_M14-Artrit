@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { PRIMARY_COLOR } from 'CONFIGURATION';
 import { Subscription } from 'rxjs';
 import { AudioPlayerComponent } from '../../audio-player/audio-player.component';
 
@@ -10,10 +11,13 @@ import { AudioPlayerComponent } from '../../audio-player/audio-player.component'
 export class ContentAudioComponent implements OnInit, OnChanges, AfterViewInit{
 
   @Input() item: any;
-  @Input() active = false;
+  @Input() activeItem: any;
   @Output() mapView = new EventEmitter<any>();
   @ViewChild(AudioPlayerComponent, {static: true}) player: AudioPlayerComponent;
   sub: Subscription | null = null;
+  linkHover = false;
+
+  PRIMARY_COLOR = PRIMARY_COLOR;
 
   constructor() { }
 
@@ -30,7 +34,7 @@ export class ContentAudioComponent implements OnInit, OnChanges, AfterViewInit{
 
   update() {
     if (this.player && this.player.player) {
-      if (this.active) {
+      if (this.activeItem === this.item) {
         this.player.player.play();
         if (this.sub === null) {
           if (this.item.audio_timestamps && this.item.audio_timestamps.length) {
